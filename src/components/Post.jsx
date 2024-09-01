@@ -2,37 +2,56 @@ import { Avatar } from "./Avatar";
 import { Comment } from "./Comment";
 import styles from "./Post.module.css";
 
-export function Post(){
+// Lib date-fns
+import { format, formatDistanceToNow } from "date-fns";
+import ptBr from "date-fns/locale/pt-BR";
+
+
+
+
+
+
+export function Post({ author, publishedAt, content }){
+
+     const publishedDateFormated = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {locale: ptBr,});
+
+     const publishedRelativeToNow = formatDistanceToNow(publishedAt, {
+          locale: ptBr,
+          addSuffix: true,
+     })
+
      return(
           <>
               <article className={styles.post}>
                     <header>
                          <div className={styles.author}>
-                              <Avatar src="https://avatars.githubusercontent.com/u/79612590?v=4"/>
+                              <Avatar src={author.avatarUrl}/>
                               <div className={styles.authorInfo}>
-                                   <strong>Ellyf Bernardo</strong>
-                                   <span>Web Developer</span>
+                                   <strong>{author.name}</strong>
+                                   <span>{author.role}</span>
                               </div>
                          </div>
 
-                         <time title="30 de Agosto às 20:54h" dateTime="30/08/2024 20:54:30"> Publicado há 1h</time>
+                         <time title={publishedDateFormated} dateTime={publishedAt.toISOString()}>
+                         
+                              {publishedRelativeToNow}
+                         </time>
 
                     </header>
 
 
                     <div className={styles.content}>
-                         <p>Fala galeraa 👋</p>
+                         {content.map(line =>{
+                              if(line.type === 'paragraph'){
+                                   return <p>{line.content}</p>
 
-                         <p>Acabei de subir mais um projeto no meu portifólio. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀</p>
+                         }else if(line.type === 'link'){
+                              return <p><a href="">{line.content}</a></p>
+                         }
+                    
+                         })}
+                    </div>
 
-                         <p><a href="">ellyf.bernardo</a></p>
-
-                         <p>
-                              <a href="">#novoprojeto</a> {' '}
-                              <a href="">#github</a> {' '}
-                              <a href="">#post</a>{' '}
-                         </p>
-               </div>
                <form className={styles.commentForm}>
                     <strong>Deixe seu feedback</strong>
 
