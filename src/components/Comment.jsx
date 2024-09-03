@@ -21,7 +21,7 @@ export function Comment(){
                                    </button>
                               </header>
 
-                              <p>Muito bom Ellyf, parabéns!!</p>
+                              <p>Muito bom, parabéns!!</p>
                          </div>
 
                     <footer>
