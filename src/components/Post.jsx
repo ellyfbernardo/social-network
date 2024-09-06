@@ -12,10 +12,10 @@ import ptBr from "date-fns/locale/pt-BR";
 export function Post({ author, publishedAt, content }){
 
      const [comments, setComments] = useState([
-          1,
-          2,
+          'post muito bacana'
      ]);
 
+     const [newCommentText, setNewCommentText] = useState('');
 
      const publishedDateFormated = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {locale: ptBr,});
 
@@ -28,9 +28,17 @@ export function Post({ author, publishedAt, content }){
      function handleCreateNewComment(){
           event.preventDefault();
 
-          setComments([...comments, comments.length + 1]);
-     }
+          const newCommentText = event.target.comment.value;
+          setComments([...comments, newCommentText]);
 
+          setNewCommentText('');
+
+     };
+     
+     function handleCreateNewCommentChange(){
+          setNewCommentText(event.target.value);
+          
+     };
 
      return(
           <>
@@ -55,10 +63,10 @@ export function Post({ author, publishedAt, content }){
                     <div className={styles.content}>
                          {content.map(line =>{
                               if(line.type === 'paragraph'){
-                                   return <p>{line.content}</p>
+                                   return <p key={line.content}>{line.content}</p>
 
                          }else if(line.type === 'link'){
-                              return <p><a href="">{line.content}</a></p>
+                              return <p key={line.content}><a href="">{line.content}</a></p>
                          }
                     
                          })}
@@ -69,6 +77,9 @@ export function Post({ author, publishedAt, content }){
 
                     <textarea 
                          placeholder="Deixe um comentário"
+                         name="comment"
+                         value={newCommentText}
+                         onChange={handleCreateNewCommentChange}
                     />
                     
                     <footer>
@@ -78,7 +89,7 @@ export function Post({ author, publishedAt, content }){
 
               <div className={styles.commentList}>
                     {comments.map(comments =>{
-                         return <Comment/>
+                         return <Comment key={comments} content={comments}/>
                     })}
               </div>
               </article>
